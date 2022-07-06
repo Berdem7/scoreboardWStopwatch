@@ -1,78 +1,63 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-class StopWatch extends React.Component{
-    state ={
-        isRunning:false,
-        sec:0,
-        min:0,
-        hr:0
+function StopWatch (props){
+    const [isRunning, setIsRunning] = useState(false);
+    const [sec, setSec] = useState(0);
+    const [min, setMin] = useState(0);
+    const [hr, setHr] = useState(0);
+
+
+        console.log(isRunning);
+        console.log(sec);
+
+
+    useEffect(()=>{
+        if(isRunning){
+            const intervalID = 
+        setInterval(()=> tick(), 10)
+        console.log("itsw")
+        return ()=>{
+            clearInterval(intervalID)
+        }
     }
-
-    componentDidMount(){
-        this.intervalID = setInterval(()=>this.state.isRunning && this.tick(), 10)
-    }
-
-    // componentWillUnmount(){
-    //     clearInterval(this.intervalID)
-    // }
-
-    tick = ()=>{
-        
-        if(this.state.isRunning){
-            this.setState((prevState)=>({
-                sec:  prevState.sec += 1,
-                
-                // }))
-                
-            })
-            
-            // console.log(Date.now())
-            )
-            if (this.state.sec == 100) {
-                this.setState((prevState)=>({
-                    sec: prevState.sec - 100,
-                    min: prevState.min += 1
-                }))
-        //  this.state.min = prevState.min + 1;
-        //  this.state.sec = 0;
-     }
-        if (this.state.min == 60) {
-            this.setState((prevState)=>({
-                min: prevState.min - 60,
-                hr: prevState.hr += 1
-            }))
         }
-        }
+        ,[isRunning,sec]
+    )
+    
+        const tick = () => {
+            if(isRunning==true){
+                console.log("itsrunning")
+                setSec(sec=>sec+1)
+                if(sec==100){
+                    setSec(sec=>sec-100)
+                    setMin(min=>min+1)
+                }
+                if(min==60){
+                    setMin(min=>min-60)
+                    setHr(hr=>hr+1)
+                }
+            }
         }
 
-    handleStopwatch =()=>{
-        console.log(Date.now())
-        this.setState(prevState=>({
-            isRunning: !prevState.isRunning,
-            // sec:this.state.sec,
-            
-        }))
-        console.log(this.state);
+ const   handleStopwatch =()=>{
+        setIsRunning(isRunning=>!isRunning)
 }
 
 
-resetTimer =()=> {
-    this.setState({
-        isRunning:false,
-        sec:0,
-        min:0,
-        hr:0
-    })
+const resetTimer =()=> {
+    setHr(0)
+    setMin(0)
+    setSec(0)
+    setIsRunning(false)
 }
 
-render (){
     return (
         <div className="stopwatch">
             <h2>Stopwatch</h2>
-            <span className="stopwatch-time">{this.state.hr <10 ? "0"+this.state.hr :this.state.hr} m :{this.state.min <10 ? "0"+this.state.min :this.state.min} s :{this.state.sec <10 ? "0"+this.state.sec :this.state.sec} ms</span>
-            <button className="" onClick={this.handleStopwatch}>{this.state.isRunning ? "Stop" : "Start"}</button>
+            <span className="stopwatch-time">{hr <10 ? "0"+hr :hr} m :{min <10 ? "0"+min :min} s :{sec <10 ? "0"+sec :sec} ms</span>
+            <button className="" onClick={handleStopwatch}>{isRunning ? "Stop" : "Start"}</button>
             {/* <button className="" onClick={()=>this.stopTimer()}>Stop timer</button> */}
-            <button className="" onClick={this.resetTimer}>Reset timer</button>
+            <button className="" onClick={resetTimer}>Reset timer</button>
             <div className="stopwatch"></div>
             {/* <Counter id={props.id} index={props.index} score={props.score} incrementScore={props.incrementScore} decrementScore={props.decrementScore}/> */}
         </div>
@@ -81,5 +66,4 @@ render (){
 }
     
 
-}
 export default StopWatch
